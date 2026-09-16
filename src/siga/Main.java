@@ -15,9 +15,9 @@ public class Main {
         System.out.println("=== SIGA - Atividade de Padrões Criacionais (código inicial) ===\n");
 
         AcessoDados acesso = new AcessoDados();
-        acesso.conectar("MYSQL");
+       acesso.conectar(new FabricaMySQL());
         System.out.println();
-        acesso.conectar("POSTGRESQL");
+        acesso.conectar(new FabricaPostgreSQL());
 
         System.out.println();
         // PROBLEMA 2 em ação: o que significa cada número nesta chamada?
