@@ -26,21 +26,14 @@ package siga;
  *   - Etapa 4: transformar o AcessoDados em um Singleton.
  */
 public class AcessoDados {
+    private Conexao conexao;
+    private Comando comando;
 
-    // PROBLEMA 1: conexão e comando criados separadamente, sem garantia de coerência.
-    public void conectar(String fornecedor) {
-        Conexao conexao;
-        Comando comando;
-        if (fornecedor.equals("MYSQL")) {
-            conexao = new ConexaoMySQL();
-            comando = new ComandoMySQL();
-        } else {
-            conexao = new ConexaoPostgreSQL();
-            comando = new ComandoPostgreSQL();
-        }
-        // Nada impede o engano abaixo (fornecedores misturados):
-        //   conexao = new ConexaoMySQL();
-        //   comando = new ComandoPostgreSQL();  // <- incoerência não detectada!
+    // Utiliza a fábrica para garantir a criação de conexão e comando compatíveis
+      public void conectar(FabricaBanco factory) {
+        // Armazena as instâncias fornecidas pela fábrica
+        this.conexao = factory.criarConexao();
+        this.comando = factory.criarComando();
         conexao.abrir();
         comando.executar("SELECT * FROM aluno");
     }
