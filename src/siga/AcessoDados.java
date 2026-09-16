@@ -38,16 +38,57 @@ public class AcessoDados {
         comando.executar("SELECT * FROM aluno");
     }
 
-    // PROBLEMA 2: método telescópico — muitos parâmetros opcionais.
-    public String montarConsulta(String tabela, String filtro, String ordenacao,
-                                 int limite, int offset, int timeoutSegundos,
-                                 boolean somenteAtivos) {
-        StringBuilder sb = new StringBuilder("SELECT * FROM ").append(tabela);
-        if (filtro != null) sb.append(" WHERE ").append(filtro);
-        if (somenteAtivos) sb.append(filtro != null ? " AND ativo = 1" : " WHERE ativo = 1");
-        if (ordenacao != null) sb.append(" ORDER BY ").append(ordenacao);
-        if (limite > 0) sb.append(" LIMIT ").append(limite);
-        if (offset > 0) sb.append(" OFFSET ").append(offset);
-        return sb.toString();
+    // Fornece uma interface fluente para a criação da consulta, evitando o construtor telescópico
+    public MontarConsultaBuilder montarConsultaBuilder(String tabela) {
+        return new MontarConsultaBuilder(tabela);
+    }
+    
+    public static class MontarConsultaBuilder {
+
+        private String tabela;
+        private String filtro;
+        private StringBuilder sb;
+
+        // Inicializa o construtor com a tabela base da consulta
+        public MontarConsultaBuilder(String tabela) {
+            this.tabela = tabela;
+            this.sb = new StringBuilder("SELECT * FROM ").append(this.tabela);
+        }
+
+        // Adiciona uma cláusula WHERE com o filtro especificado
+        public MontarConsultaBuilder comFiltro(String filtro) {
+            this.filtro = filtro;
+            sb.append(" WHERE ").append(this.filtro);
+            return this;
+        }
+
+        // Adiciona a restrição para filtrar apenas registros ativos
+        public MontarConsultaBuilder comSomenteAtivos() {
+            sb.append(this.filtro != null ? " AND ativo = 1" : " WHERE ativo = 1");
+            return this;
+        }
+
+        // Adiciona uma ordenação aos resultados da consulta
+        public MontarConsultaBuilder comOrdenacao(String ordenacao) {
+            sb.append(" ORDER BY ").append(ordenacao);
+            return this;
+        }
+
+        // Define um limite para a quantidade de registros retornados
+        public MontarConsultaBuilder comLimite(int limite) {
+            sb.append(" LIMIT ").append(limite);
+            return this;
+        }
+
+        // Adiciona um deslocamento (offset) para a paginação
+        public MontarConsultaBuilder comOffset(int offset) {
+            sb.append(" OFFSET ").append(offset);
+            return this;
+        }
+
+        // Finaliza e retorna a string da consulta SQL montada
+        public String montarConsulta() {
+            return this.sb.toString();
+        }
     }
 }
