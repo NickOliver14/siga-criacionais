@@ -26,8 +26,18 @@ package siga;
  *   - Etapa 4: transformar o AcessoDados em um Singleton.
  */
 public class AcessoDados {
+   private static final AcessoDados INSTANCIA = new AcessoDados();
     private Conexao conexao;
     private Comando comando;
+
+    // Garante que a classe só possa ser instanciada internamente (padrão Singleton)
+    private AcessoDados() {
+    }
+
+    // Fornece o ponto de acesso global para recuperar a única instância da classe
+     public static AcessoDados getInstancia() {
+        return INSTANCIA;
+    }
 
     // Utiliza a fábrica para garantir a criação de conexão e comando compatíveis
       public void conectar(FabricaBanco factory) {
