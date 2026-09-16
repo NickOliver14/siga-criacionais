@@ -1,0 +1,3 @@
+1. **Analisar** o código inicial e identificar a possibilidade de misturar fornecedores e o método de consulta telescópico.
+
+o código da classe de acesso a dados tem dois problemas que podem ser resolvidos com padrões de projeto pois o método de conectar usa muitos if e else o que obriga a alterar o código sempre que entra um banco novo além de gerar risco de misturar comandos e para resolver isso o ideal é usar o Abstract Factory já o método de montar consulta tem parâmetros demais o que gera confusão com valores como null ou true e facilita errar a ordem das coisas sendo resolvido com o padrão Builder que organiza melhor a criação desse objeto complexo.
