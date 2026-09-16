@@ -20,10 +20,10 @@ public class Main {
         acesso.conectar(new FabricaPostgreSQL());
 
         System.out.println();
-        // PROBLEMA 2 em ação: o que significa cada número nesta chamada?
-        String consulta = acesso.montarConsulta("aluno", "curso = 'DSM'", "nome",
-                50, 0, 30, true);
+        // Utilização do método builder criado para que não fique ambiguo a passagem de argumentos ao metodo
+        String consulta = acesso.montarConsultaBuilder("aluno").comFiltro("curso = 'DSM'").comOrdenacao("nome").comLimite(50).comOffset(0).comSomenteAtivos().montarConsulta();
         System.out.println("Consulta montada: " + consulta);
+
 
         System.out.println("\nObserve: nada garante que conexão e comando sejam do mesmo");
         System.out.println("fornecedor (Abstract Factory resolve); o método de consulta tem");
